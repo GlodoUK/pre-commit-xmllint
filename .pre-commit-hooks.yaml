@@ -1,0 +1,12 @@
+- id: xmllint-format
+  name: xmllint format
+  description: Format XML files using `xmllint --format`
+  entry: format-with-xmllint
+  language: script
+  types_or: [xml]
+- id: lxml-format
+  name: lxml format
+  description: Format XML files using Python and lxml
+  entry: format-with-lxml
+  language: python
+  types_or: [xml]

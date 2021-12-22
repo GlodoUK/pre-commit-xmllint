@@ -1,0 +1,36 @@
+#!/bin/sh
+
+export XMLLINT_INDENT="    "
+XMLLINT=xmllint
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+NO_COLOUR='\033[0m'
+
+if [ $? -ne 0 ]; then
+  echo "Usage: format-with-xmllint <files..>"
+  exit 2
+fi
+
+retval=0
+
+for FILE in "$@"; do
+  tmpfile=$(mktemp)
+  if ! $XMLLINT --format $FILE > $tmpfile; then
+    echo "XML check for $FILE: ${RED}cannot parse${NO_COLOUR}"
+    retval=1
+  else
+    if ! diff $tmpfile $FILE; then
+      tmpfile=$(mktemp)
+      $XMLLINT --format $FILE > $tmpfile
+      cp $tmpfile $FILE
+      echo "XML check for $FILE: ${YELLOW}reformatted${NO_COLOUR}"
+    else
+      echo "XML check for $FILE: ${GREEN}OK${NO_COLOUR}"
+    fi
+  fi
+  rm -f $tmpfile
+done
+
+exit $retval
