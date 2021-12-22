@@ -14,7 +14,10 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         with open(filename, 'r+') as xml_file:
             try:
                 data = etree.tostring(
-                    etree.parse(xml_file), pretty_print=True
+                    etree.parse(xml_file),
+                    pretty_print=True,
+                    xml_declaration=True,
+                    encoding='utf-8',
                 ).decode('utf-8')
 
                 xml_file.seek(0)
